@@ -50,8 +50,13 @@ def find_tag():
                         print(counter, ". ",yaml_file)
 
             except (yaml.YAMLError, KeyError, UnicodeDecodeError) as e:
-                continue
-                print(e)
+                if e == KeyError:
+                    # do something 
+                    print("TAGS MISSING FROM: ", yaml_file)
+                    continue
+                elif e == UnicodeDecodeError:
+                    print("DECODE ERROR IN: ", yaml_file)
+                    continue
     
     print("Number of files found: ", counter)  # final output
 
