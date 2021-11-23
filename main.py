@@ -36,6 +36,7 @@ def yaml_files():
 def find_tag():
     yaml_files()  # obtain all the yaml files available
     counter = 0
+    error_counter = 0
     output_list = []
     for yaml_file in yaml_list:
         with open(yaml_file, "r") as stream:
@@ -47,16 +48,12 @@ def find_tag():
                     if tag == "attack." + input_tag:
                         counter += 1
                         output_list.append(yaml_file)
-                        print(counter, ". ",yaml_file)
+                        # print(counter, ". ",yaml_file)
 
             except (yaml.YAMLError, KeyError, UnicodeDecodeError) as e:
-                if e == KeyError:
-                    # do something 
-                    print("TAGS MISSING FROM: ", yaml_file)
-                    continue
-                elif e == UnicodeDecodeError:
-                    print("DECODE ERROR IN: ", yaml_file)
-                    continue
+                print("ERROR ", error_counter, ": ", e, " | ", yaml_file)
+                error_counter+=1
+                continue
     
     print("Number of files found: ", counter)  # final output
 
