@@ -1,18 +1,20 @@
-#   ______          _____ _______ 
-# |  ____|/\      / ____|__   __|
-# | |__  /  \    | (___    | |   
-# |  __|/ /\ \    \___ \   | |   
-# | |_ / ____ \ _ ____) |  | |   
-# |_(_)_/    \_(_)_____(_) |_|   
-# 
-# Author: Hassan (hassan.4.ali@bt.com)
-# Version: 1.1                                 
+print("  ______          _____ _______") 
+print("|  ____|/\      / ____|__   __|")
+print("| |__  /  \    | (___    | |")   
+print("|  __|/ /\ \    \___ \   | |")   
+print("| |_ / ____ \ _ ____) |  | |")   
+print("|_(_)_/    \_(_)_____(_) |_|")   
+print("") 
+print("# Author: Hassan (hassan.4.ali@bt.com")
+print("# Version: 1.1")          
+print("")                       
 
 
 ###########################################
 # IMPORTED MODULES
 ###########################################
 
+from pandas.core.groupby.generic import AggScalar
 import yaml
 import os
 import pandas as pd
@@ -22,7 +24,18 @@ import pandas as pd
 ###########################################
 
 yaml_list = []
+# data = {'IDs': {},
+#         'Location': [],
+#         'Number of files': ""}
 
+data = {
+    'IDs': {
+
+    }
+}
+# data = {'IDs': {},
+#         'Location': [],
+#         'Number of files': ""}
 
 ###########################################
 # MAIN CODE
@@ -41,17 +54,22 @@ def find_tag(path, input_tag):
     counter = 0
     error_counter = 0
     output_list = []
+    data["IDs"][input_tag] = []
+    data["IDs"]["IDs"] = input_tag
 
     for yaml_file in yaml_list:
         try:
-            # stream = open(yaml_file, "r", encoding="utf-8")
-            stream = open(yaml_file, "r")
+            stream = open(yaml_file, "r", encoding="utf-8")
+            # stream = open(yaml_file, "r")
             temp_yaml = yaml.safe_load(stream)
             for tag in temp_yaml['tags']:
                 if tag == "attack." + input_tag:
                     counter += 1
                     output_list.append(yaml_file)
                     print(counter, ". ",yaml_file)
+                    # data["IDs"].append(input_tag)
+                    # data["Location"].append(yaml_file)
+                    # data["IDs"][input_tag].append(yaml_file)
         except yaml.YAMLError as x:
             # print("YAML ERROR: ", x)
             stream = open(yaml_file, "r")
@@ -61,6 +79,9 @@ def find_tag(path, input_tag):
                     counter += 1
                     output_list.append(yaml_file)
                     print(counter, ". ",yaml_file)
+                    # data["IDs"].append(input_tag)
+                    # data["Location"].append(yaml_file)
+                    # data["IDs"][input_tag].append(yaml_file)
             continue
         except KeyError as y:
             # print("KEY ERROR: ", y)
@@ -72,13 +93,14 @@ def find_tag(path, input_tag):
             continue
     
     print("Number of files found: ", counter)  # final output
+    # data["IDs"]["Number of Rules"] = counter
+    # print(data)
+    # df = pd.DataFrame(data["IDs"])
+    # print(df)
 
-
-###########################################
-# RUN CODE
-###########################################
-def main_code():
-    print("############### Output for TDE Search ###############")
+# Manual input option
+def manual_opt():
+    print("############### Manual output for TDE Search ###############")
     print("")
 
     # Directory of folder and user input
@@ -95,11 +117,46 @@ def main_code():
     k = input("Input here: ")
     try:
         if k == "y":
-            main_code()
+            manual_opt()
         else:
             print("Thank you")
     except Exception:
         print("Thank you")
+    
+
+def auto_opt():
+    print("############### Automated excel output for TDE Search ###############")
+    print("")
+
+    # Directory of folder and user input
+    print("Input directory of the RULES folder e.g. (C:/Users/XXXX/Documents/tde/rules)")
+    path = input("type here: ")
+    print("")
+
+    # Location of Excel file
+    print("Input excel file directory e.g. (C://Users/XXXX/Documents/spreadsheet.xlsx)")
+    input_tag = input("type here: ")
+
+    input_file = pd.read_excel(input_tag, engine='openpyxl')
+    col = input_file.columns[0]
+    tags = input_file[col].tolist()
+    print(tags)
+
+    # for tag in tags:
+
+
+###########################################
+# RUN CODE - MAIN LOOP
+###########################################
+def main_code():
+    print("Enter 1 for manual. Enter 2 for automated excel input")
+    input_opt = input("1 or 2: ")
+
+    if input_opt == "1":
+        manual_opt()
+    elif input_opt == "2":
+        auto_opt()
+    
 
 
 main_code()
