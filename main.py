@@ -28,10 +28,14 @@ yaml_list = []
 #         'Location': [],
 #         'Number of files': ""}
 
+# data = {
+#     'IDs': {
+#     }
+# }
 data = {
-    'IDs': {
-
-    }
+    'IDs': [],
+    'Location': [],
+    'Number of Files': []
 }
 # data = {'IDs': {},
 #         'Location': [],
@@ -54,8 +58,11 @@ def find_tag(path, input_tag):
     counter = 0
     error_counter = 0
     output_list = []
-    data["IDs"][input_tag] = []
-    data["IDs"]["IDs"] = input_tag
+    location_string = ""
+    # data["IDs"][input_tag] = []
+    # data["IDs"]["IDs"] = input_tag
+
+    data["IDs"].append(input_tag)
 
     for yaml_file in yaml_list:
         try:
@@ -70,6 +77,7 @@ def find_tag(path, input_tag):
                     # data["IDs"].append(input_tag)
                     # data["Location"].append(yaml_file)
                     # data["IDs"][input_tag].append(yaml_file)
+                    location_string = (yaml_file.split("rules")[1] + ', ' + location_string)
         except yaml.YAMLError as x:
             # print("YAML ERROR: ", x)
             stream = open(yaml_file, "r")
@@ -82,6 +90,7 @@ def find_tag(path, input_tag):
                     # data["IDs"].append(input_tag)
                     # data["Location"].append(yaml_file)
                     # data["IDs"][input_tag].append(yaml_file)
+                    location_string = (yaml_file.split("rules")[1] + ', ' + location_string)
             continue
         except KeyError as y:
             # print("KEY ERROR: ", y)
@@ -93,10 +102,12 @@ def find_tag(path, input_tag):
             continue
     
     print("Number of files found: ", counter)  # final output
+    data["Location"].append(location_string)
+    data["Number of Files"].append(counter)
     # data["IDs"]["Number of Rules"] = counter
-    # print(data)
-    # df = pd.DataFrame(data["IDs"])
-    # print(df)
+    print(data)
+    df = pd.DataFrame(data)
+    print(df)
 
 # Manual input option
 def manual_opt():
