@@ -24,22 +24,12 @@ import pandas as pd
 ###########################################
 
 yaml_list = []
-# data = {'IDs': {},
-#         'Location': [],
-#         'Number of files': ""}
-
-# data = {
-#     'IDs': {
-#     }
-# }
+df = ""
 data = {
     'IDs': [],
     'Location': [],
     'Number of Files': []
 }
-# data = {'IDs': {},
-#         'Location': [],
-#         'Number of files': ""}
 
 ###########################################
 # MAIN CODE
@@ -104,10 +94,8 @@ def find_tag(path, input_tag):
     print("Number of files found: ", counter)  # final output
     data["Location"].append(location_string)
     data["Number of Files"].append(counter)
-    # data["IDs"]["Number of Rules"] = counter
-    print(data)
+    global df
     df = pd.DataFrame(data)
-    print(df)
 
 # Manual input option
 def manual_opt():
@@ -124,13 +112,19 @@ def manual_opt():
 
     print("To run another query type y")
     print("To close windows press any other key")
-
+    
     k = input("Input here: ")
     try:
         if k == "y":
             manual_opt()
         else:
-            print("Thank you")
+            print("(IMPORTANT)Please specify Folder for output excel file e.g. (C:/Users/XXXX/Documents/output.xlsx)")
+            output_name = input("Input here: ")
+            try: 
+                df.to_excel(output_name, index=False, header=True)
+                print("Success!")
+            except Exception as e:
+                print(e)
     except Exception:
         print("Thank you")
     
@@ -153,8 +147,26 @@ def auto_opt():
     tags = input_file[col].tolist()
     print(tags)
 
-    # for tag in tags:
+    for tag in tags:
+        find_tag(path, tag)
 
+    print("To run another query type y")
+    print("To close windows press any other key")
+    
+    k = input("Input here: ")
+    try:
+        if k == "y":
+            manual_opt()
+        else:
+            print("(IMPORTANT)Please specify Folder for output excel file e.g. (C:/Users/XXXX/Documents/output.xlsx)")
+            output_name = input("Input here: ")
+            try: 
+                df.to_excel(output_name, index=False, header=True)
+                print("Success!")
+            except Exception as e:
+                print(e)
+    except Exception:
+        print("Thank you")
 
 ###########################################
 # RUN CODE - MAIN LOOP
