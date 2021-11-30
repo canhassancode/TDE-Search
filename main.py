@@ -5,7 +5,7 @@ print("|  __|/ /\ \    \___ \   | |")
 print("| |_ / ____ \ _ ____) |  | |")   
 print("|_(_)_/    \_(_)_____(_) |_|")   
 print("") 
-print("# Author: Hassan (hassan.4.ali@bt.com")
+print("# Author: Hassan (hassan.4.ali@bt.com)")
 print("# Version: 1.1")          
 print("")                       
 
@@ -118,10 +118,11 @@ def manual_opt():
         if k == "y":
             manual_opt()
         else:
-            print("(IMPORTANT)Please specify Folder for output excel file e.g. (C:/Users/XXXX/Documents/output.xlsx)")
+            print("(IMPORTANT)Please specify Folder for output excel file e.g. (C:/Users/XXXX/Documents/output)")
+            print("Do not specify extension of file e.g. xlsx or xls")
             output_name = input("Input here: ")
             try: 
-                df.to_excel(output_name, index=False, header=True)
+                df.to_excel(output_name + '.xlsx', index=False, header=True)
                 print("Success!")
             except Exception as e:
                 print(e)
