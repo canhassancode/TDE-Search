@@ -151,6 +151,7 @@ def auto_opt():
     print(tags)
 
     for tag in tags:
+        tag = tag.lower()
         find_tag(path, tag)
 
     print("To run another query type y")
