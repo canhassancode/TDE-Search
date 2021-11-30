@@ -107,7 +107,9 @@ def manual_opt():
 
     path = input("type here: ")
     input_tag = input("attack tag (e.g. t1047): ")
-
+    print(input_tag)
+    input_tag = input_tag.lower()
+    print(input_tag)
     find_tag(path, input_tag)
 
     print("To run another query type y")
