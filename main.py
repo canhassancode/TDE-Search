@@ -14,7 +14,7 @@ print("")
 # IMPORTED MODULES
 ###########################################
 
-from pandas.core.groupby.generic import AggScalar
+# from pandas.core.groupby.generic import AggScalar
 import yaml
 import os
 import pandas as pd
@@ -123,11 +123,11 @@ def manual_opt():
             output_name = input("Input here: ")
             try: 
                 df.to_excel(output_name + '.xlsx', index=False, header=True)
-                print("Success!")
+                input("Success!")
             except Exception as e:
-                print(e)
+                input(e)
     except Exception:
-        print("Thank you")
+        input("Thank you")
     
 
 def auto_opt():
