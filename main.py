@@ -6,7 +6,7 @@ print("| |_ / ____ \ _ ____) |  | |")
 print("|_(_)_/    \_(_)_____(_) |_|")   
 print("") 
 print("# Author: Hassan (hassan.4.ali@bt.com)")
-print("# Version: 1.1")          
+print("# Version: 1.2")          
 print("")                       
 
 
@@ -80,7 +80,7 @@ def find_tag(input_tag):
             error_counter+=1
             continue
     
-    print("Number of files found: ", counter)  # final output
+    print("Number of rules found for", input_tag, ": ", counter)  # final output
     data["Location"].append(location_string)
     data["Number of Files"].append(counter)
     global df
@@ -96,11 +96,9 @@ def manual_opt():
 
     # path = input("type here: ")
     input_tag = input("attack tag (e.g. t1047): ")
-    print(input_tag)
-    input_tag = input_tag.lower()
-    print(input_tag)
+    # input_tag = input_tag.lower()
     # find_tag(path, input_tag)
-    find_tag(input_tag)
+    find_tag(input_tag.lower())
 
     print("To run another query type y")
     print("To close windows press any other key")
@@ -187,11 +185,9 @@ for root, dirs, files in os.walk(path):
             current_yaml = (os.path.join(root, file)).replace("\\", "/")
             if current_yaml not in yaml_list:
                 yaml_list.append(current_yaml)
-                print(list_counter, ". ", current_yaml)
                 list_counter += 1
+                print(list_counter, ". ", current_yaml)
 
 print("")
 print("Found ", list_counter, " rules in repository.")
 main_code()
-
-
