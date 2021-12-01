@@ -24,6 +24,7 @@ import pandas as pd
 ###########################################
 
 yaml_list = []
+list_counter = 0
 df = ""
 data = {
     'IDs': [],
@@ -36,40 +37,33 @@ data = {
 ###########################################
 
 # Find all YML files by walking through all directories
-def yaml_files(path):
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            if file.endswith(".yml"):
-                current_yaml = (os.path.join(root, file)).replace("\\", "/")
-                yaml_list.append(current_yaml)
+# def yaml_files(path):
+#     for root, dirs, files in os.walk(path):
+#         for file in files:
+#             if file.endswith(".yml"):
+#                 current_yaml = (os.path.join(root, file)).replace("\\", "/")
+#                 yaml_list.append(current_yaml)
 
-def find_tag(path, input_tag):
-    yaml_files(path)  # obtain all the yaml files available
+def find_tag(input_tag):
+    # yaml_files(path)  # obtain all the yaml files available
     counter = 0
     error_counter = 0
     output_list = []
     location_string = ""
-    # data["IDs"][input_tag] = []
-    # data["IDs"]["IDs"] = input_tag
 
     data["IDs"].append(input_tag)
 
     for yaml_file in yaml_list:
         try:
             stream = open(yaml_file, "r", encoding="utf-8")
-            # stream = open(yaml_file, "r")
             temp_yaml = yaml.safe_load(stream)
             for tag in temp_yaml['tags']:
                 if tag == "attack." + input_tag:
                     counter += 1
                     output_list.append(yaml_file)
                     print(counter, ". ",yaml_file)
-                    # data["IDs"].append(input_tag)
-                    # data["Location"].append(yaml_file)
-                    # data["IDs"][input_tag].append(yaml_file)
                     location_string = (yaml_file.split("rules")[1] + ', ' + location_string)
         except yaml.YAMLError as x:
-            # print("YAML ERROR: ", x)
             stream = open(yaml_file, "r")
             temp_yaml = list(yaml.safe_load_all(stream))
             for tag in temp_yaml[0]['tags']:
@@ -77,17 +71,12 @@ def find_tag(path, input_tag):
                     counter += 1
                     output_list.append(yaml_file)
                     print(counter, ". ",yaml_file)
-                    # data["IDs"].append(input_tag)
-                    # data["Location"].append(yaml_file)
-                    # data["IDs"][input_tag].append(yaml_file)
                     location_string = (yaml_file.split("rules")[1] + ', ' + location_string)
             continue
         except KeyError as y:
-            # print("KEY ERROR: ", y)
             error_counter+=1
             continue
         except UnicodeDecodeError as z:
-            # print("UNICODE ERROR: ", z, yaml_file)
             error_counter+=1
             continue
     
@@ -103,14 +92,15 @@ def manual_opt():
     print("")
 
     # Directory of folder and user input
-    print("Input directory of the RULES folder e.g. (C:/Users/XXXX/Documents/tde/rules)")
+    # print("Input directory of the RULES folder e.g. (C:/Users/XXXX/Documents/tde/rules)")
 
-    path = input("type here: ")
+    # path = input("type here: ")
     input_tag = input("attack tag (e.g. t1047): ")
     print(input_tag)
     input_tag = input_tag.lower()
     print(input_tag)
-    find_tag(path, input_tag)
+    # find_tag(path, input_tag)
+    find_tag(input_tag)
 
     print("To run another query type y")
     print("To close windows press any other key")
@@ -136,10 +126,10 @@ def auto_opt():
     print("############### Automated excel output for TDE Search ###############")
     print("")
 
-    # Directory of folder and user input
-    print("Input directory of the RULES folder e.g. (C:/Users/XXXX/Documents/tde/rules)")
-    path = input("type here: ")
-    print("")
+    # # Directory of folder and user input
+    # print("Input directory of the RULES folder e.g. (C:/Users/XXXX/Documents/tde/rules)")
+    # path = input("type here: ")
+    # print("")
 
     # Location of Excel file
     print("Input excel file directory e.g. (C://Users/XXXX/Documents/spreadsheet.xlsx)")
@@ -152,7 +142,8 @@ def auto_opt():
 
     for tag in tags:
         tag = tag.lower()
-        find_tag(path, tag)
+        # find_tag(path, tag)
+        find_tag(tag)
 
     print("To run another query type y")
     print("To close windows press any other key")
@@ -185,7 +176,22 @@ def main_code():
         auto_opt()
     
 
+# Find all files and append them to list for input
 
+print("Input directory of the RULES folder e.g. (C:/Users/XXXX/Documents/tde/rules)")
+path = input("type here: ")
+print("")
+for root, dirs, files in os.walk(path):
+    for file in files:
+        if file.endswith(".yml"):
+            current_yaml = (os.path.join(root, file)).replace("\\", "/")
+            if current_yaml not in yaml_list:
+                yaml_list.append(current_yaml)
+                print(list_counter, ". ", current_yaml)
+                list_counter += 1
+
+print("")
+print("Found ", list_counter, " rules in repository.")
 main_code()
 
 
