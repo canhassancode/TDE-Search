@@ -154,12 +154,12 @@ def auto_opt():
             print("(IMPORTANT)Please specify Folder for output excel file e.g. (C:/Users/XXXX/Documents/output.xlsx)")
             output_name = input("Input here: ")
             try: 
-                df.to_excel(output_name, index=False, header=True)
-                print("Success!")
+                df.to_excel(output_name + '.xlsx', index=False, header=True)
+                input("Success!")
             except Exception as e:
-                print(e)
+                input(e)
     except Exception:
-        print("Thank you")
+        input("Thank you")
 
 ###########################################
 # RUN CODE - MAIN LOOP
