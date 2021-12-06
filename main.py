@@ -1,4 +1,4 @@
-print("  ______          _____ _______") 
+print(" ______          _____ _______") 
 print("|  ____|/\      / ____|__   __|")
 print("| |__  /  \    | (___    | |")   
 print("|  __|/ /\ \    \___ \   | |")   
@@ -9,12 +9,11 @@ print("# Author: Hassan (hassan.4.ali@bt.com)")
 print("# Version: 1.2")          
 print("")                       
 
-
 ###########################################
 # IMPORTED MODULES
 ###########################################
 
-# from pandas.core.groupby.generic import AggScalar
+from numpy import add
 import yaml
 import os
 import pandas as pd
@@ -28,30 +27,21 @@ list_counter = 0
 df = ""
 data = {
     'IDs': [],
-    'Location': [],
-    'Number of Files': []
+    'Location': []
 }
 
 ###########################################
 # MAIN CODE
 ###########################################
 
-# Find all YML files by walking through all directories
-# def yaml_files(path):
-#     for root, dirs, files in os.walk(path):
-#         for file in files:
-#             if file.endswith(".yml"):
-#                 current_yaml = (os.path.join(root, file)).replace("\\", "/")
-#                 yaml_list.append(current_yaml)
-
-def find_tag(input_tag):
-    # yaml_files(path)  # obtain all the yaml files available
+def find_tag(input_tag, add_opt):
     counter = 0
     error_counter = 0
-    output_list = []
-    location_string = ""
 
-    data["IDs"].append(input_tag)
+    # location_string = ""
+    # logsource = ""
+
+    # data["IDs"].append(input_tag)
 
     for yaml_file in yaml_list:
         try:
@@ -60,18 +50,43 @@ def find_tag(input_tag):
             for tag in temp_yaml['tags']:
                 if tag == "attack." + input_tag:
                     counter += 1
-                    output_list.append(yaml_file)
                     print(counter, ". ",yaml_file)
-                    location_string = (yaml_file.split("rules")[1] + ', ' + location_string)
+                    # location_string = (location_string + ', ' + yaml_file.split("rules")[1])
+                    location_string = yaml_file.split("rules")[1]
+                    print("HERE", add_opt)
+                    # Additonal parameters
+                    if add_opt == "1":
+                        # logsource = (temp_yaml["logsource"] + ', ' + logsource)
+                        logsource = str(temp_yaml["logsource"])
+                        # print(logsource)
+                        data["Logsource"].append(logsource)
+
+                    data["IDs"].append(input_tag)
+                    data["Location"].append(location_string)
+                    # data["Number of Files"].append(counter)
+
         except yaml.YAMLError as x:
             stream = open(yaml_file, "r")
             temp_yaml = list(yaml.safe_load_all(stream))
             for tag in temp_yaml[0]['tags']:
                 if tag == "attack." + input_tag:
                     counter += 1
-                    output_list.append(yaml_file)
                     print(counter, ". ",yaml_file)
-                    location_string = (yaml_file.split("rules")[1] + ', ' + location_string)
+                    # location_string = (yaml_file.split("rules")[1] + ', ' + location_string)
+                    location_string = yaml_file.split("rules")[1]
+
+                    # Additonal parameters
+                    if add_opt == "1":
+                        # logsource = (temp_yaml["logsource"] + ', ' + logsource)
+                        logsource = str(temp_yaml["logsource"])
+                        # print(logsource)
+                        data["Logsource"].append(logsource)
+
+                    data["IDs"].append(input_tag)
+                    data["Location"].append(location_string)
+                    # data["Number of Files"].append(counter)
+
+                    
             continue
         except KeyError as y:
             error_counter+=1
@@ -79,26 +94,26 @@ def find_tag(input_tag):
         except UnicodeDecodeError as z:
             error_counter+=1
             continue
-    
+
+    # data["IDs"].append(input_tag)
+    # data["Location"].append(location_string)
+    # data["Number of Files"].append(counter)
+
+    # # Additional Paramaters
+    # data["Logsource"].append(logsource)
+
     print("Number of rules found for", input_tag, ": ", counter)  # final output
-    data["Location"].append(location_string)
-    data["Number of Files"].append(counter)
     global df
+    print(data)
     df = pd.DataFrame(data)
 
 # Manual input option
-def manual_opt():
+def manual_opt(add_opt):
     print("############### Manual output for TDE Search ###############")
     print("")
 
-    # Directory of folder and user input
-    # print("Input directory of the RULES folder e.g. (C:/Users/XXXX/Documents/tde/rules)")
-
-    # path = input("type here: ")
     input_tag = input("attack tag (e.g. t1047): ")
-    # input_tag = input_tag.lower()
-    # find_tag(path, input_tag)
-    find_tag(input_tag.lower())
+    find_tag(input_tag.lower(), add_opt)
 
     print("To run another query type y")
     print("To close windows press any other key")
@@ -106,7 +121,7 @@ def manual_opt():
     k = input("Input here: ")
     try:
         if k == "y":
-            manual_opt()
+            manual_opt(add_opt)
         else:
             print("(IMPORTANT)Please specify Folder for output excel file e.g. (C:/Users/XXXX/Documents/output)")
             print("Do not specify extension of file e.g. xlsx or xls")
@@ -120,14 +135,9 @@ def manual_opt():
         input("Thank you")
     
 
-def auto_opt():
+def auto_opt(add_opt):
     print("############### Automated excel output for TDE Search ###############")
     print("")
-
-    # # Directory of folder and user input
-    # print("Input directory of the RULES folder e.g. (C:/Users/XXXX/Documents/tde/rules)")
-    # path = input("type here: ")
-    # print("")
 
     # Location of Excel file
     print("Input excel file directory e.g. (C://Users/XXXX/Documents/spreadsheet.xlsx)")
@@ -140,8 +150,7 @@ def auto_opt():
 
     for tag in tags:
         tag = tag.lower()
-        # find_tag(path, tag)
-        find_tag(tag)
+        find_tag(tag, add_opt)
 
     print("To run another query type y")
     print("To close windows press any other key")
@@ -165,17 +174,33 @@ def auto_opt():
 # RUN CODE - MAIN LOOP
 ###########################################
 def main_code():
-    print("Enter 1 for manual. Enter 2 for automated excel input")
-    input_opt = input("1 or 2: ")
+    # Initial options for Manual or Automated
+    print("1) Manual Mode - Search by ID")
+    print("2) Automated Mode - Search by Excel Sheet")
+    input_opt = input("input here: ")
 
+    # Additional parameters
+    print("")
+    print("IMPORTANT: All additional parameters include default!")
+    print("For multiple paramters input multiple numbers. E.g. 123")
+    print("0) Default mode - Output rules with relative locations")
+    print("1) Logsources +")
+    print("2) Detections (coming soon...)")
+    add_opt = input("input here: ")
+
+    if add_opt == "" or add_opt == "0":
+        add_opt = "0"
+    elif add_opt is "1":
+        data["Logsource"] = []
+    elif add_opt is "2":
+        print("coming soon..")
     if input_opt == "1":
-        manual_opt()
+        manual_opt(add_opt)
     elif input_opt == "2":
-        auto_opt()
+        auto_opt(add_opt)
     
 
 # Find all files and append them to list for input
-
 print("Input directory of the RULES folder e.g. (C:/Users/XXXX/Documents/tde/rules)")
 path = input("type here: ")
 print("")
