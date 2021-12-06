@@ -13,7 +13,7 @@ print("")
 # IMPORTED MODULES
 ###########################################
 
-from numpy import add
+# from numpy import add
 import yaml
 import os
 import pandas as pd
@@ -38,11 +38,6 @@ def find_tag(input_tag, add_opt):
     counter = 0
     error_counter = 0
 
-    # location_string = ""
-    # logsource = ""
-
-    # data["IDs"].append(input_tag)
-
     for yaml_file in yaml_list:
         try:
             stream = open(yaml_file, "r", encoding="utf-8")
@@ -51,19 +46,19 @@ def find_tag(input_tag, add_opt):
                 if tag == "attack." + input_tag:
                     counter += 1
                     print(counter, ". ",yaml_file)
-                    # location_string = (location_string + ', ' + yaml_file.split("rules")[1])
                     location_string = yaml_file.split("rules")[1]
                     print("HERE", add_opt)
+
                     # Additonal parameters
-                    if add_opt == "1":
-                        # logsource = (temp_yaml["logsource"] + ', ' + logsource)
+                    if "1" in add_opt:
                         logsource = str(temp_yaml["logsource"])
-                        # print(logsource)
                         data["Logsource"].append(logsource)
+                    if "2" in add_opt:
+                        detection = str(temp_yaml["detection"])
+                        data["Detection"].append(detection)
 
                     data["IDs"].append(input_tag)
                     data["Location"].append(location_string)
-                    # data["Number of Files"].append(counter)
 
         except yaml.YAMLError as x:
             stream = open(yaml_file, "r")
@@ -72,19 +67,18 @@ def find_tag(input_tag, add_opt):
                 if tag == "attack." + input_tag:
                     counter += 1
                     print(counter, ". ",yaml_file)
-                    # location_string = (yaml_file.split("rules")[1] + ', ' + location_string)
                     location_string = yaml_file.split("rules")[1]
 
                     # Additonal parameters
-                    if add_opt == "1":
-                        # logsource = (temp_yaml["logsource"] + ', ' + logsource)
+                    if "1" in add_opt:
                         logsource = str(temp_yaml["logsource"])
-                        # print(logsource)
                         data["Logsource"].append(logsource)
+                    if "2" in add_opt:
+                        detection = str(temp_yaml["detection"])
+                        data["Detection"].append(detection)
 
                     data["IDs"].append(input_tag)
                     data["Location"].append(location_string)
-                    # data["Number of Files"].append(counter)
 
                     
             continue
@@ -94,13 +88,6 @@ def find_tag(input_tag, add_opt):
         except UnicodeDecodeError as z:
             error_counter+=1
             continue
-
-    # data["IDs"].append(input_tag)
-    # data["Location"].append(location_string)
-    # data["Number of Files"].append(counter)
-
-    # # Additional Paramaters
-    # data["Logsource"].append(logsource)
 
     print("Number of rules found for", input_tag, ": ", counter)  # final output
     global df
@@ -190,10 +177,11 @@ def main_code():
 
     if add_opt == "" or add_opt == "0":
         add_opt = "0"
-    elif add_opt is "1":
+    if "1" in add_opt:
         data["Logsource"] = []
-    elif add_opt is "2":
-        print("coming soon..")
+    if "2" in add_opt:
+        data["Detection"] = []
+
     if input_opt == "1":
         manual_opt(add_opt)
     elif input_opt == "2":
