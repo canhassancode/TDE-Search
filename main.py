@@ -6,7 +6,7 @@ print("| |_ / ____ \ _ ____) |  | |")
 print("|_(_)_/    \_(_)_____(_) |_|")   
 print("") 
 print("# Author: Hassan (hassan.4.ali@bt.com)")
-print("# Version: 1.2")          
+print("# Version: 1.3")          
 print("")                       
 
 ###########################################
@@ -51,12 +51,19 @@ def find_tag(input_tag, add_opt):
 
                     # Additonal parameters
                     if "1" in add_opt:
-                        logsource = str(temp_yaml["logsource"])
-                        data["Logsource"].append(logsource)
+                        try:
+                            logsource = str(temp_yaml["logsource"])
+                            data["Logsource"].append(logsource)
+                        except Exception as e:
+                            input(e)
+                            data["Logsource"].append("Error")
                     if "2" in add_opt:
-                        detection = str(temp_yaml["detection"])
-                        data["Detection"].append(detection)
-
+                        try:
+                            detection = str(temp_yaml["detection"])
+                            data["Detection"].append(detection)
+                        except Exception as f:
+                            input(f)
+                            data["Detection"].append(detection)
                     data["IDs"].append(input_tag)
                     data["Location"].append(location_string)
 
@@ -71,22 +78,32 @@ def find_tag(input_tag, add_opt):
 
                     # Additonal parameters
                     if "1" in add_opt:
-                        logsource = str(temp_yaml["logsource"])
-                        data["Logsource"].append(logsource)
+                        try:
+                            logsource = str(temp_yaml["logsource"])
+                            data["Logsource"].append(logsource)
+                        except Exception as e:
+                            input(e)
+                            data["Logsource"].append("Error")
                     if "2" in add_opt:
-                        detection = str(temp_yaml["detection"])
-                        data["Detection"].append(detection)
-
-                    data["IDs"].append(input_tag)
-                    data["Location"].append(location_string)
-
+                        try:
+                            detection = str(temp_yaml["detection"])
+                            data["Detection"].append(detection)
+                        except Exception as f:
+                            input(f)
+                            data["Detection"].append(detection)
+            input(x)
                     
             continue
         except KeyError as y:
             error_counter+=1
+            input(y)
             continue
         except UnicodeDecodeError as z:
             error_counter+=1
+            input(z)
+            continue
+        except Exception as error:
+            input(error)
             continue
 
     print("Number of rules found for", input_tag, ": ", counter)  # final output
@@ -154,8 +171,9 @@ def auto_opt(add_opt):
                 input("Success!")
             except Exception as e:
                 input(e)
-    except Exception:
-        input("Thank you")
+    except Exception as y:
+        input(y)
+
 
 ###########################################
 # RUN CODE - MAIN LOOP
