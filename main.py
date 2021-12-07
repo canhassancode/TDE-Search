@@ -91,19 +91,19 @@ def find_tag(input_tag, add_opt):
                         except Exception as f:
                             input(f)
                             data["Detection"].append(detection)
-            input(x)
+            # input(x)
                     
             continue
         except KeyError as y:
             error_counter+=1
-            input(y)
+            input("KEY ERROR: ", temp_yaml)
             continue
         except UnicodeDecodeError as z:
             error_counter+=1
-            input(z)
+            input("UNICODE ERROR: ", temp_yaml)
             continue
         except Exception as error:
-            input(error)
+            input("Exception: ", temp_yaml)
             continue
 
     print("Number of rules found for", input_tag, ": ", counter)  # final output
