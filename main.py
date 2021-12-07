@@ -14,6 +14,7 @@ print("")
 ###########################################
 
 # from numpy import add
+from pandas.core.indexing import convert_to_index_sliceable
 import yaml
 import os
 import pandas as pd
@@ -57,6 +58,7 @@ def find_tag(input_tag, add_opt):
                         except Exception as e:
                             input(e)
                             data["Logsource"].append("Error")
+                            continue
                     if "2" in add_opt:
                         try:
                             detection = str(temp_yaml["detection"])
@@ -64,6 +66,7 @@ def find_tag(input_tag, add_opt):
                         except Exception as f:
                             input(f)
                             data["Detection"].append(detection)
+                            continue
                     data["IDs"].append(input_tag)
                     data["Location"].append(location_string)
 
@@ -84,6 +87,7 @@ def find_tag(input_tag, add_opt):
                         except Exception as e:
                             input(e)
                             data["Logsource"].append("Error")
+                            continue
                     if "2" in add_opt:
                         try:
                             detection = str(temp_yaml["detection"])
@@ -91,6 +95,7 @@ def find_tag(input_tag, add_opt):
                         except Exception as f:
                             input(f)
                             data["Detection"].append(detection)
+                            continue
             # input(x)
                     
             continue
