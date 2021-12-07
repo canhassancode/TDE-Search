@@ -114,7 +114,10 @@ def find_tag(input_tag, add_opt):
     print("Number of rules found for", input_tag, ": ", counter)  # final output
     global df
     print(data)
-    df = pd.DataFrame(data)
+    try:
+        df = pd.DataFrame(data)
+    except Exception as e:
+        input("HERE: ", e)
 
 # Manual input option
 def manual_opt(add_opt):
