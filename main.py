@@ -48,7 +48,6 @@ def find_tag(input_tag, add_opt):
                     counter += 1
                     print(counter, ". ",yaml_file)
                     location_string = yaml_file.split("rules")[1]
-                    print("HERE", add_opt)
 
                     # Additonal parameters
                     if "1" in add_opt:
@@ -56,6 +55,7 @@ def find_tag(input_tag, add_opt):
                             logsource = str(temp_yaml["logsource"])
                             data["Logsource"].append(logsource)
                         except Exception as e:
+                            print("Logsource Error")
                             input(e)
                             data["Logsource"].append("Error")
                             continue
@@ -64,6 +64,7 @@ def find_tag(input_tag, add_opt):
                             detection = str(temp_yaml["detection"])
                             data["Detection"].append(detection)
                         except Exception as f:
+                            print("Detecion Error")
                             input(f)
                             data["Detection"].append(detection)
                             continue
@@ -85,6 +86,7 @@ def find_tag(input_tag, add_opt):
                             logsource = str(temp_yaml["logsource"])
                             data["Logsource"].append(logsource)
                         except Exception as e:
+                            print("Logsource Error in yaml safe")
                             input(e)
                             data["Logsource"].append("Error")
                             continue
@@ -93,27 +95,26 @@ def find_tag(input_tag, add_opt):
                             detection = str(temp_yaml["detection"])
                             data["Detection"].append(detection)
                         except Exception as f:
+                            print("Detecion Error in yaml safe")
                             input(f)
                             data["Detection"].append(detection)
                             continue
             # input(x)
-                    
             continue
         except KeyError as y:
             error_counter+=1
-            input("KEY ERROR: ", temp_yaml)
+            print("KEY ERROR: ", yaml_file)
             continue
         except UnicodeDecodeError as z:
             error_counter+=1
-            input("UNICODE ERROR: ", temp_yaml)
+            print("UNICODE ERROR: " + temp_yaml)
             continue
         except Exception as error:
-            input("Exception: ", temp_yaml)
+            print("ERROR: ", error)
             continue
 
     print("Number of rules found for", input_tag, ": ", counter)  # final output
     global df
-    print(data)
     try:
         df = pd.DataFrame(data)
     except Exception as e:
