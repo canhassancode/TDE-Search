@@ -35,7 +35,6 @@ data = {
 
 def find_tag(input_tag, add_opt):
     counter = 0
-    error_counter = 0
 
     for yaml_file in yaml_list:
         try:
@@ -64,30 +63,32 @@ def find_tag(input_tag, add_opt):
             temp_yaml = list(yaml.safe_load_all(stream))
 
             for sub_yaml in range(len(temp_yaml)):
-                for tag in temp_yaml[sub_yaml]['tags']:
-                    if tag == "attack." + input_tag:
-                        counter += 1
-                        print(counter, ". ",yaml_file)
-                        location_string = yaml_file.split("rules")[1]
+                try:
+                    for tag in temp_yaml[sub_yaml]['tags']: # TODO: Add feature to go through sub-yamls regardless of later tags
+                        if tag == "attack." + input_tag:
+                            counter += 1
+                            print(counter, ". ",yaml_file)
+                            location_string = yaml_file.split("rules")[1]
 
-                        # Additonal parameters
-                        if "1" in add_opt:
-                            try:
-                                logsource = str(temp_yaml[0]["logsource"])
-                                data["Logsource"].append(logsource)
-                            except Exception as e:
-                                input(e)
-                                data["Logsource"].append("Error")
-                                continue
-                        data["IDs"].append(input_tag)
-                        data["Location"].append(location_string)
-                continue
+                            # Additonal parameters
+                            if "1" in add_opt:
+                                try:
+                                    logsource = str(temp_yaml[0]["logsource"])
+                                    data["Logsource"].append(logsource)
+                                except Exception as e:
+                                    input(e)
+                                    data["Logsource"].append("Error")
+                                    continue
+                            data["IDs"].append(input_tag)
+                            data["Location"].append(location_string)
+                    continue
+                except Exception as e:
+                    # print("EXCEPTION KEY ERROR")
+                    continue
         except KeyError as y:
-            error_counter+=1
             # print("KEY ERROR: ", yaml_file)
             continue
         except UnicodeDecodeError as z:
-            error_counter+=1
             # print("UNICODE ERROR: " + temp_yaml)
             continue
         except Exception as error:
