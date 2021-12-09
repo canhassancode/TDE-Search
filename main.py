@@ -54,7 +54,7 @@ def find_tag(input_tag, add_opt):
                         except Exception as e:
                             input(e)
                             data["Logsource"].append("Error")
-                            continue
+                            # continue
                     data["IDs"].append(input_tag)
                     data["Location"].append(location_string)
 
@@ -76,9 +76,9 @@ def find_tag(input_tag, add_opt):
                                     logsource = str(temp_yaml[0]["logsource"])
                                     data["Logsource"].append(logsource)
                                 except Exception as e:
-                                    input(e)
+                                    input("HERE ", e)
                                     data["Logsource"].append("Error")
-                                    continue
+                                    # continue
                             data["IDs"].append(input_tag)
                             data["Location"].append(location_string)
                     continue
@@ -94,13 +94,16 @@ def find_tag(input_tag, add_opt):
         except Exception as error:
             # print("ERROR: ", error)
             continue
-
+    
+    if counter == 0:
+        data["IDs"].append(input_tag)
+        data["Location"].append("No Rules associated")
     print("Number of rules found for", input_tag, ": ", counter)  # final output
     global df
     try:
         df = pd.DataFrame(data)
     except Exception as e:
-        input(e)
+        print(e)
 
 # Manual input user 
 def manual_opt(add_opt):
