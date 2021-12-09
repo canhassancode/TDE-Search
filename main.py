@@ -52,6 +52,7 @@ def find_tag(input_tag, add_opt):
                             logsource = str(temp_yaml["logsource"])
                             data["Logsource"].append(logsource)
                         except Exception as e:
+                            print("here 1")
                             input(e)
                             data["Logsource"].append("Error")
                             # continue
@@ -76,7 +77,8 @@ def find_tag(input_tag, add_opt):
                                     logsource = str(temp_yaml[0]["logsource"])
                                     data["Logsource"].append(logsource)
                                 except Exception as e:
-                                    input("HERE ", e)
+                                    print("here")
+                                    input(e)
                                     data["Logsource"].append("Error")
                                     # continue
                             data["IDs"].append(input_tag)
