@@ -14,7 +14,7 @@ print("")
 ###########################################
 
 # from numpy import add
-from pandas.core.indexing import convert_to_index_sliceable
+# from pandas.core.indexing import convert_to_index_sliceable
 import yaml
 import os
 import pandas as pd
@@ -54,19 +54,11 @@ def find_tag(input_tag, add_opt):
                         try:
                             logsource = str(temp_yaml["logsource"])
                             data["Logsource"].append(logsource)
+                            print(type(logsource))
                         except Exception as e:
                             print("Logsource Error")
                             input(e)
                             data["Logsource"].append("Error")
-                            continue
-                    if "2" in add_opt:
-                        try:
-                            detection = str(temp_yaml["detection"])
-                            data["Detection"].append(detection)
-                        except Exception as f:
-                            print("Detecion Error")
-                            input(f)
-                            data["Detection"].append(detection)
                             continue
                     data["IDs"].append(input_tag)
                     data["Location"].append(location_string)
@@ -74,33 +66,30 @@ def find_tag(input_tag, add_opt):
         except yaml.YAMLError as x:
             stream = open(yaml_file, "r")
             temp_yaml = list(yaml.safe_load_all(stream))
-            for tag in temp_yaml[0]['tags']:
-                if tag == "attack." + input_tag:
-                    counter += 1
-                    print(counter, ". ",yaml_file)
-                    location_string = yaml_file.split("rules")[1]
+            # temp_yaml = yaml.safe_load_all(stream)
+            # print(temp_yaml)
+            for sub_yaml in range(len(temp_yaml)):
+                for tag in temp_yaml[sub_yaml]['tags']:
+                    if tag == "attack." + input_tag:
+                        counter += 1
+                        print(counter, ". ",yaml_file)
+                        location_string = yaml_file.split("rules")[1]
 
-                    # Additonal parameters
-                    if "1" in add_opt:
-                        try:
-                            logsource = str(temp_yaml["logsource"])
-                            data["Logsource"].append(logsource)
-                        except Exception as e:
-                            print("Logsource Error in yaml safe")
-                            input(e)
-                            data["Logsource"].append("Error")
-                            continue
-                    if "2" in add_opt:
-                        try:
-                            detection = str(temp_yaml["detection"])
-                            data["Detection"].append(detection)
-                        except Exception as f:
-                            print("Detecion Error in yaml safe")
-                            input(f)
-                            data["Detection"].append(detection)
-                            continue
-            # input(x)
-            continue
+                        # Additonal parameters
+                        if "1" in add_opt:
+                            try:
+                                logsource = str(temp_yaml[0]["logsource"])
+                                data["Logsource"].append(logsource)
+                                print(type(logsource))
+                            except Exception as e:
+                                print("Logsource Error in yaml safe")
+                                print(tag)
+                                input(e)
+                                data["Logsource"].append("Error")
+                                continue
+                        data["IDs"].append(input_tag)
+                        data["Location"].append(location_string)
+                continue
         except KeyError as y:
             error_counter+=1
             print("KEY ERROR: ", yaml_file)
@@ -118,7 +107,7 @@ def find_tag(input_tag, add_opt):
     try:
         df = pd.DataFrame(data)
     except Exception as e:
-        input("HERE: ", e)
+        input(e)
 
 # Manual input option
 def manual_opt(add_opt):
@@ -159,11 +148,10 @@ def auto_opt(add_opt):
     input_file = pd.read_excel(input_tag, engine='openpyxl')
     col = input_file.columns[0]
     tags = input_file[col].tolist()
-    print(tags)
+    # print(tags)
 
     for tag in tags:
-        tag = tag.lower()
-        find_tag(tag, add_opt)
+        find_tag(tag.lower(), add_opt)
 
     print("To run another query type y")
     print("To close windows press any other key")
@@ -199,20 +187,16 @@ def main_code():
     print("For multiple paramters input multiple numbers. E.g. 123")
     print("0) Default mode - Output rules with relative locations")
     print("1) Logsources +")
-    print("2) Detections (coming soon...)")
+    print("2) coming soon...")
     add_opt = input("input here: ")
 
     if add_opt == "" or add_opt == "0":
         add_opt = "0"
     if "1" in add_opt:
         data["Logsource"] = []
-    if "2" in add_opt:
-        data["Detection"] = []
 
     if input_opt == "1":
         manual_opt(add_opt)
-    elif input_opt == "2":
-        auto_opt(add_opt)
     
 
 # Find all files and append them to list for input
