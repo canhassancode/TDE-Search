@@ -174,7 +174,6 @@ def main_code():
     print("2) Automated Mode - Search by Excel Sheet")
     print("3) Cleanup Mode - Housekeeping (coming soon...")
     input_opt = input("input here: ")
-
     while True:
         if input_opt not in input_modes:
             input_opt = input("ERROR. Please try again: ")
@@ -190,7 +189,6 @@ def main_code():
     print("1) Logsources +")
     print("2) coming soon...")
     add_opt = input("input here: ")
-
     while True:
         if add_opt not in add_modes:
             add_opt = input("ERROR. Please try again: ")
@@ -204,7 +202,8 @@ def main_code():
 
     if input_opt == "1":
         manual_opt(add_opt)
-    
+    if input_opt == "2":
+        auto_opt(add_opt)
 
 # Find all files and append them to list for input
 print("Input directory of the RULES folder e.g. (C:/Users/XXXX/Documents/tde/rules)")
