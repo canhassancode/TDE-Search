@@ -6,15 +6,13 @@ print("| |_ / ____ \ _ ____) |  | |")
 print("|_(_)_/    \_(_)_____(_) |_|")   
 print("") 
 print("# Author: Hassan (hassan.4.ali@bt.com)")
-print("# Version: 1.3")          
+print("# Version: 1.4")          
 print("")                       
 
 ###########################################
 # IMPORTED MODULES
 ###########################################
 
-# from numpy import add
-# from pandas.core.indexing import convert_to_index_sliceable
 import yaml
 import os
 import pandas as pd
@@ -54,9 +52,7 @@ def find_tag(input_tag, add_opt):
                         try:
                             logsource = str(temp_yaml["logsource"])
                             data["Logsource"].append(logsource)
-                            print(type(logsource))
                         except Exception as e:
-                            print("Logsource Error")
                             input(e)
                             data["Logsource"].append("Error")
                             continue
@@ -66,8 +62,7 @@ def find_tag(input_tag, add_opt):
         except yaml.YAMLError as x:
             stream = open(yaml_file, "r")
             temp_yaml = list(yaml.safe_load_all(stream))
-            # temp_yaml = yaml.safe_load_all(stream)
-            # print(temp_yaml)
+
             for sub_yaml in range(len(temp_yaml)):
                 for tag in temp_yaml[sub_yaml]['tags']:
                     if tag == "attack." + input_tag:
@@ -80,10 +75,7 @@ def find_tag(input_tag, add_opt):
                             try:
                                 logsource = str(temp_yaml[0]["logsource"])
                                 data["Logsource"].append(logsource)
-                                print(type(logsource))
                             except Exception as e:
-                                print("Logsource Error in yaml safe")
-                                print(tag)
                                 input(e)
                                 data["Logsource"].append("Error")
                                 continue
@@ -92,14 +84,14 @@ def find_tag(input_tag, add_opt):
                 continue
         except KeyError as y:
             error_counter+=1
-            print("KEY ERROR: ", yaml_file)
+            # print("KEY ERROR: ", yaml_file)
             continue
         except UnicodeDecodeError as z:
             error_counter+=1
-            print("UNICODE ERROR: " + temp_yaml)
+            # print("UNICODE ERROR: " + temp_yaml)
             continue
         except Exception as error:
-            print("ERROR: ", error)
+            # print("ERROR: ", error)
             continue
 
     print("Number of rules found for", input_tag, ": ", counter)  # final output
@@ -109,7 +101,7 @@ def find_tag(input_tag, add_opt):
     except Exception as e:
         input(e)
 
-# Manual input option
+# Manual input user 
 def manual_opt(add_opt):
     print("############### Manual output for TDE Search ###############")
     print("")
@@ -137,6 +129,7 @@ def manual_opt(add_opt):
         input("Thank you")
     
 
+# Automatic input from Excel file
 def auto_opt(add_opt):
     print("############### Automated excel output for TDE Search ###############")
     print("")
@@ -148,7 +141,6 @@ def auto_opt(add_opt):
     input_file = pd.read_excel(input_tag, engine='openpyxl')
     col = input_file.columns[0]
     tags = input_file[col].tolist()
-    # print(tags)
 
     for tag in tags:
         find_tag(tag.lower(), add_opt)
@@ -177,11 +169,20 @@ def auto_opt(add_opt):
 ###########################################
 def main_code():
     # Initial options for Manual or Automated
+    input_modes = ["1", "2"]
     print("1) Manual Mode - Search by ID")
     print("2) Automated Mode - Search by Excel Sheet")
+    print("3) Cleanup Mode - Housekeeping (coming soon...")
     input_opt = input("input here: ")
 
+    while True:
+        if input_opt not in input_modes:
+            input_opt = input("ERROR. Please try again: ")
+        else:
+            break
+
     # Additional parameters
+    add_modes = ["0", "1"]
     print("")
     print("IMPORTANT: All additional parameters include default!")
     print("For multiple paramters input multiple numbers. E.g. 123")
@@ -189,6 +190,12 @@ def main_code():
     print("1) Logsources +")
     print("2) coming soon...")
     add_opt = input("input here: ")
+
+    while True:
+        if add_opt not in add_modes:
+            add_opt = input("ERROR. Please try again: ")
+        else:
+            break
 
     if add_opt == "" or add_opt == "0":
         add_opt = "0"
