@@ -52,9 +52,8 @@ def find_tag(input_tag, add_opt):
                             logsource = str(temp_yaml["logsource"])
                             data["Logsource"].append(logsource)
                         except Exception as e:
-                            print("here 1")
-                            input(e)
-                            data["Logsource"].append("Error")
+                            # print(e)
+                            data["Logsource"].append("Logsource not found. Manual check required")
                             # continue
                     data["IDs"].append(input_tag)
                     data["Location"].append(location_string)
@@ -65,7 +64,7 @@ def find_tag(input_tag, add_opt):
 
             for sub_yaml in range(len(temp_yaml)):
                 try:
-                    for tag in temp_yaml[sub_yaml]['tags']: # TODO: Add feature to go through sub-yamls regardless of later tags
+                    for tag in temp_yaml[0]['tags']: # TODO: Add feature to go through sub-yamls regardless of later tags
                         if tag == "attack." + input_tag:
                             counter += 1
                             print(counter, ". ",yaml_file)
@@ -74,12 +73,11 @@ def find_tag(input_tag, add_opt):
                             # Additonal parameters
                             if "1" in add_opt:
                                 try:
-                                    logsource = str(temp_yaml[0]["logsource"])
+                                    logsource = str(temp_yaml[sub_yaml]["logsource"])
                                     data["Logsource"].append(logsource)
                                 except Exception as e:
-                                    print("here")
-                                    input(e)
-                                    data["Logsource"].append("Error")
+                                    # print(e)
+                                    data["Logsource"].append("Logsource not found. Manual check required")
                                     # continue
                             data["IDs"].append(input_tag)
                             data["Location"].append(location_string)
