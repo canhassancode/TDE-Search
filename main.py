@@ -72,10 +72,10 @@ def find_tag(input_tag, add_opt):
                             for index in temp_yaml["logsource"]:
                                 if index not in logsource:
                                     other_logsource += (str(index) + ": " + str(temp_yaml["logsource"][index]) + ", ")
+                            other_logsource = other_logsource[:-1]
+                            other_logsource = other_logsource[:-1]
                             if other_logsource == "":
                                 other_logsource = "Nothing found."
-                            other_logsource = other_logsource[:-1]
-                            other_logsource = other_logsource[:-1]
                             data["Other"].append(other_logsource)
                         except Exception:
                             data["Other"].append("Nothing found.")
@@ -121,10 +121,10 @@ def find_tag(input_tag, add_opt):
                                     for index in temp_yaml["logsource"]:
                                         if index not in logsource:
                                             other_logsource += (str(index) + ": " + str(temp_yaml["logsource"][index]) + ", ")
+                                    other_logsource = other_logsource[:-1]
+                                    other_logsource = other_logsource[:-1]
                                     if other_logsource == "":
                                         other_logsource = "Nothing found."
-                                    other_logsource = other_logsource[:-1]
-                                    other_logsource = other_logsource[:-1]
                                     data["Other"].append(other_logsource)
                                 except Exception:
                                     data["Other"].append("Nothing found.")
