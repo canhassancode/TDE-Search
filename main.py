@@ -148,6 +148,7 @@ def find_tag(input_tag, add_opt):
     
     if counter == 0:
         data["IDs"].append(input_tag)
+        data["Location"].append("No Rules associated")
         data["Product"].append("No Rules associated")
         data["Service"].append("No Rules associated")
         data["Other"].append("N/A")
