@@ -35,6 +35,7 @@ data = {
 
 def find_tag(input_tag, add_opt):
     counter = 0
+    logsource = ["product", "service"]
 
     for yaml_file in yaml_list:
         try:
@@ -46,15 +47,40 @@ def find_tag(input_tag, add_opt):
                     print(counter, ". ",yaml_file)
                     location_string = yaml_file.split("rules")[1]
 
-                    # Additonal parameters
+                    # ADDITIONAL PARAMETERS
+
+                    # Logsource
                     if "1" in add_opt:
+
+                        # Product
                         try:
-                            logsource = str(temp_yaml["logsource"])
-                            data["Logsource"].append(logsource)
-                        except Exception as e:
-                            # print(e)
-                            data["Logsource"].append("Logsource not found. Manual check required")
-                            # continue
+                            product = str(temp_yaml["logsource"]["product"])
+                            data["Product"].append(product)
+                        except Exception:
+                            data["Product"].append("Nothing found.")
+
+                        # Service
+                        try:
+                            service = str(temp_yaml["logsource"]["service"])
+                            data["Service"].append(service)
+                        except Exception:
+                            data["Service"].append("Nothing found.")
+
+                        # Other
+                        try:
+                            other_logsource = ""
+                            for index in temp_yaml["logsource"]:
+                                if index not in logsource:
+                                    other_logsource += (str(index) + ": " + str(temp_yaml["logsource"][index]) + ", ")
+                            if other_logsource == "":
+                                other_logsource = "Nothing found."
+                            other_logsource = other_logsource[:-1]
+                            other_logsource = other_logsource[:-1]
+                            data["Other"].append(other_logsource)
+                        except Exception:
+                            data["Other"].append("Nothing found.")
+                    # ----------------    
+
                     data["IDs"].append(input_tag)
                     data["Location"].append(location_string)
 
@@ -70,15 +96,40 @@ def find_tag(input_tag, add_opt):
                             print(counter, ". ",yaml_file)
                             location_string = yaml_file.split("rules")[1]
 
-                            # Additonal parameters
+                            # ADDITIONAL PARAMETERS
+
+                            # Logsource -------
                             if "1" in add_opt:
+
+                                # Product
                                 try:
-                                    logsource = str(temp_yaml[sub_yaml]["logsource"])
-                                    data["Logsource"].append(logsource)
-                                except Exception as e:
-                                    # print(e)
-                                    data["Logsource"].append("Logsource not found. Manual check required")
-                                    # continue
+                                    product = str(temp_yaml["logsource"]["product"])
+                                    data["Product"].append(product)
+                                except Exception:
+                                    data["Product"].append("Nothing found.")
+
+                                # Service
+                                try:
+                                    service = str(temp_yaml["logsource"]["service"])
+                                    data["Service"].append(service)
+                                except Exception:
+                                    data["Service"].append("Nothing found.")
+
+                                # Other
+                                try:
+                                    other_logsource = ""
+                                    for index in temp_yaml["logsource"]:
+                                        if index not in logsource:
+                                            other_logsource += (str(index) + ": " + str(temp_yaml["logsource"][index]) + ", ")
+                                    if other_logsource == "":
+                                        other_logsource = "Nothing found."
+                                    other_logsource = other_logsource[:-1]
+                                    other_logsource = other_logsource[:-1]
+                                    data["Other"].append(other_logsource)
+                                except Exception:
+                                    data["Other"].append("Nothing found.")
+                            # ----------------
+
                             data["IDs"].append(input_tag)
                             data["Location"].append(location_string)
                     continue
@@ -97,8 +148,9 @@ def find_tag(input_tag, add_opt):
     
     if counter == 0:
         data["IDs"].append(input_tag)
-        data["Location"].append("No Rules associated")
-        data["Logsource"].append("N/A")
+        data["Product"].append("No Rules associated")
+        data["Service"].append("No Rules associated")
+        data["Other"].append("N/A")
     print("Number of rules found for", input_tag, ": ", counter)  # final output
     global df
     try:
@@ -203,7 +255,9 @@ def main_code():
     if add_opt == "" or add_opt == "0":
         add_opt = "0"
     if "1" in add_opt:
-        data["Logsource"] = []
+        data["Product"] = []
+        data["Service"] = []
+        data["Other"] = []
 
     if input_opt == "1":
         manual_opt(add_opt)
