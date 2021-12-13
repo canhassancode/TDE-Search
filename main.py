@@ -103,14 +103,14 @@ def find_tag(input_tag, add_opt):
 
                                 # Product
                                 try:
-                                    product = str(temp_yaml["logsource"]["product"])
+                                    product = str(temp_yaml[sub_yaml]["logsource"]["product"])
                                     data["Product"].append(product)
                                 except Exception:
                                     data["Product"].append("Nothing found.")
 
                                 # Service
                                 try:
-                                    service = str(temp_yaml["logsource"]["service"])
+                                    service = str(temp_yaml[sub_yaml]["logsource"]["service"])
                                     data["Service"].append(service)
                                 except Exception:
                                     data["Service"].append("Nothing found.")
@@ -118,9 +118,9 @@ def find_tag(input_tag, add_opt):
                                 # Other
                                 try:
                                     other_logsource = ""
-                                    for index in temp_yaml["logsource"]:
+                                    for index in temp_yaml[sub_yaml]["logsource"]:
                                         if index not in logsource:
-                                            other_logsource += (str(index) + ": " + str(temp_yaml["logsource"][index]) + ", ")
+                                            other_logsource += (str(index) + ": " + str(temp_yaml[sub_yaml]["logsource"][index]) + ", ")
                                     other_logsource = other_logsource[:-1]
                                     other_logsource = other_logsource[:-1]
                                     if other_logsource == "":
